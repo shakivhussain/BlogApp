@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,7 +39,32 @@ class MainActivity : ComponentActivity() {
 @Preview(showSystemUi = true)
 @Composable
 fun BlogApp() {
-    CoroutineScopeComposable()
+    RemmemberUpdatedState()
+}
+
+
+@Composable
+fun RemmemberUpdatedState(){
+
+    var counter = remember { mutableStateOf(0) }
+
+    LaunchedEffect(key1 = Unit){
+        delay(2000)
+        counter.value=10
+    }
+
+    NewCounter(counter.value)
+}
+
+@Composable fun NewCounter(value: Int) {
+
+    var state = rememberUpdatedState(newValue = value)
+    LaunchedEffect(key1 = Unit){
+        delay(5000)
+        Log.d("TAG", "NewCounter: ${state.value} ")
+    }
+
+    Text(text = value.toString())
 }
 
 
