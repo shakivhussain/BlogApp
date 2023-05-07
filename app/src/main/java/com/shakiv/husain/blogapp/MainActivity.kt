@@ -50,31 +50,21 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BlogApp() {
     KeyBoardComposable()
-
     TextField(value = "", onValueChange = {})
 }
-
-
 
 @Composable
 fun KeyBoardComposable(){
     val view = LocalView.current
-
-
-
 
     DisposableEffect(key1 = Unit){
 
         val listener = ViewTreeObserver.OnGlobalLayoutListener {
             val insets = ViewCompat.getRootWindowInsets(view)
             val isKeyBoardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime())
-
             Log.d("TAG", "KeyBoardComposable: $isKeyBoardVisible")
-
         }
-
         view.viewTreeObserver.addOnGlobalLayoutListener(listener)
-
         onDispose {
             view.viewTreeObserver.removeGlobalOnLayoutListener { listener }
         }
@@ -83,80 +73,59 @@ fun KeyBoardComposable(){
 
 @Composable
 fun MediaComposable(){
-
     val context = LocalContext.current
-    
     DisposableEffect(key1 = Unit ){
-
         val mediaPlayer = MediaPlayer.create(context,R.raw.tone)
         mediaPlayer.start()
         onDispose {
-
             mediaPlayer.stop()
             mediaPlayer.release()
-
         }
     }
-
 }
 
 
 @Composable
 fun DisposableEffectExample(){
-
     var state = remember { mutableStateOf(false) }
-
     DisposableEffect(key1 = state.value){
         Log.d("TAG", "DisposableEffectExample: Started")
         onDispose {
             Log.d("TAG", "DisposableEffectExample: onDispose")
         }
     }
-
     Button(onClick = { state.value=!state.value }) {
-
         Text(text = "Change State")
-
     }
 }
 
 @Composable
 fun RemmemberUpdatedState(){
-
     var counter = remember { mutableStateOf(0) }
-
     LaunchedEffect(key1 = Unit){
         delay(2000)
         counter.value=10
     }
-
     NewCounter(counter.value)
 }
 
 @Composable fun NewCounter(value: Int) {
-
     var state = rememberUpdatedState(newValue = value)
     LaunchedEffect(key1 = Unit){
         delay(5000)
         Log.d("TAG", "NewCounter: ${state.value} ")
     }
-
     Text(text = value.toString())
 }
 
-
 @Composable
 fun CoroutineScopeComposable() {
-
     val counter = remember { mutableStateOf(0) }
     var scope = rememberCoroutineScope()
-
-
     var text = "Counter is running ${counter.value}"
     if (counter.value == 10) {
         text = "Counter Stopped."
     }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -191,9 +160,7 @@ fun CoroutineScopeComposable() {
 
 @Composable
 fun LaunchedEffectComposable() {
-
     var counter = remember { mutableStateOf(0) }
-
     LaunchedEffect(key1 = Unit) {
         try {
             for (i in 1..10) {
@@ -203,7 +170,6 @@ fun LaunchedEffectComposable() {
         } catch (e: Exception) {
             Log.e("TAG", "Exception : ${e.message.toString()}:  ")
         }
-
     }
 
     Button(onClick = {
@@ -216,7 +182,6 @@ fun LaunchedEffectComposable() {
 
 @Composable
 fun SideEffectExample() {
-
 
     /*
 *  This function will side effect here because,
